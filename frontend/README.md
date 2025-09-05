@@ -1,0 +1,1 @@
+This folder contains the frontend code for the Amazon Clone project built with React.

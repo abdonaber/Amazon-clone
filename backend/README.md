@@ -1,0 +1,1 @@
+This folder contains the backend code for the Amazon Clone project built with Express.js.
