@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, url_for, flash, redirect, request, session
 from .extensions import db, login_manager
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 from .models import User, Product, Order
 from .forms import RegistrationForm, LoginForm
 
@@ -161,6 +161,39 @@ def remove_from_cart(product_id):
 
     session['cart'] = cart
     return redirect(url_for('cart'))
+
+
+@app.route('/checkout', methods=['POST'])
+@login_required
+def checkout():
+    cart = session.get('cart', {})
+    if not cart:
+        flash('Your cart is empty. Nothing to checkout.', 'info')
+        return redirect(url_for('cart'))
+
+    # Fetch all products in the cart in one go for efficiency
+    product_ids = [int(pid) for pid in cart.keys()]
+    products = Product.query.filter(Product.id.in_(product_ids)).all()
+    product_map = {product.id: product for product in products}
+
+    for product_id, quantity in cart.items():
+        product = product_map.get(int(product_id))
+        if product:
+            # A real app would also check stock quantity here
+            total_price = product.price * quantity
+            order = Order(
+                user_id=current_user.id,
+                product_id=product.id,
+                quantity=quantity,
+                total_price=total_price
+            )
+            db.session.add(order)
+
+    db.session.commit()
+    session.pop('cart', None)  # Clear the cart from the session
+
+    flash('Thank you for your order! It has been placed successfully.', 'success')
+    return redirect(url_for('home'))
 
 
 # --- CLI Commands ---

@@ -46,7 +46,9 @@
     </div>
     <div class="cart-total">
       <h4>Total: ${{ "%.2f"|format(total_price) }}</h4>
-      <a href="#" class="btn btn-success">Proceed to Checkout</a>
+      <form action="{{ url_for('checkout') }}" method="POST">
+        <button type="submit" class="btn btn-success">Proceed to Checkout</button>
+      </form>
     </div>
   {% else %}
     <div class="alert alert-info">
