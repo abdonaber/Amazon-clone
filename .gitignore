@@ -1,0 +1,23 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Flask specific
+instance/
+.webassets-cache
+
+# Virtual environment
+.env
+.venv
+env/
+venv/
+ENV/
+VENV/
+
+# Editor/IDE specific
+.idea/
+.vscode/
+*.swp
+*.swo
