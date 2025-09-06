@@ -43,6 +43,16 @@ def product_detail(product_id):
     return render_template('product.html', product=product)
 
 
+@app.route("/about")
+def about():
+    return render_template('about.html', title='About')
+
+
+@app.route("/contact")
+def contact():
+    return render_template('contact.html', title='Contact')
+
+
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:

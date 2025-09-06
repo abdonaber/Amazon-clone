@@ -350,3 +350,18 @@ footer {
         text-align: left;
     }
 }
+
+/* --- Footer --- */
+.footer-nav {
+    margin-bottom: 1rem;
+}
+
+.footer-nav a {
+    color: var(--white);
+    margin: 0 15px;
+    text-decoration: none;
+}
+
+.footer-nav a:hover {
+    text-decoration: underline;
+}
