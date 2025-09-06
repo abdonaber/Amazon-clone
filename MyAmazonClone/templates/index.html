@@ -13,7 +13,7 @@
                 </a>
                 <p class="price">${{ "%.2f"|format(product.price) }}</p>
                 <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST">
-                    <button type="submit" class="btn">Add to Cart</button>
+                    <button type="submit" class="btn btn-primary">Add to Cart</button>
                 </form>
             </div>
         {% else %}
