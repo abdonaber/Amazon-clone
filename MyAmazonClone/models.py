@@ -1,3 +1,4 @@
+from datetime import datetime
 from .app import db
 
 class User(db.Model):
@@ -22,3 +23,20 @@ class Product(db.Model):
 
     def __repr__(self):
         return f'<Product {self.name}>'
+
+
+class Order(db.Model):
+    __tablename__ = 'orders'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False, default=1)
+    total_price = db.Column(db.Float, nullable=False)
+    order_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    # Define relationships for easy access to related User and Product objects
+    user = db.relationship('User', backref=db.backref('orders', lazy=True))
+    product = db.relationship('Product', backref=db.backref('orders', lazy=True))
+
+    def __repr__(self):
+        return f'<Order {self.id}>'
