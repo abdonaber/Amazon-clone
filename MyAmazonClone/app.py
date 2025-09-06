@@ -20,17 +20,31 @@ db = SQLAlchemy(app)
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    products = Product.query.all()
+    return render_template('index.html', products=products)
 
 if __name__ == '__main__':
     app.run(debug=True)
 
 
 # Import models here to avoid circular import issues and make them known to the CLI
-from .models import User
+from .models import User, Product, Order
 
 @app.cli.command('init-db')
 def init_db_command():
-    """Creates the database tables."""
+    """Clears the existing data, creates new tables, and seeds with sample data."""
+    db.drop_all()
     db.create_all()
-    print('Initialized the database.')
+
+    # Add sample products
+    products = [
+        Product(name='Laptop', description='A powerful laptop for all your needs.', price=1200.50, image_url='https://placehold.co/600x400/EEE/31343C?text=Laptop', stock_quantity=10),
+        Product(name='Smartphone', description='A smart and sleek phone.', price=800.00, image_url='https://placehold.co/600x400/EEE/31343C?text=Smartphone', stock_quantity=25),
+        Product(name='Headphones', description='Noise-cancelling headphones.', price=150.75, image_url='https://placehold.co/600x400/EEE/31343C?text=Headphones', stock_quantity=50),
+        Product(name='Coffee Maker', description='Brews the perfect cup of coffee.', price=89.99, image_url='https://placehold.co/600x400/EEE/31343C?text=Coffee+Maker', stock_quantity=30)
+    ]
+
+    db.session.add_all(products)
+
+    db.session.commit()
+    print('Initialized the database and seeded with sample products.')
