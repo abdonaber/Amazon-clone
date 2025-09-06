@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, url_for, flash, redirect, request
+from flask import Flask, render_template, url_for, flash, redirect, request, session
 from .extensions import db, login_manager
 from flask_login import login_user, current_user, logout_user
 from .models import User, Product, Order
@@ -78,6 +78,52 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+
+@app.route("/add_to_cart/<int:product_id>", methods=['POST'])
+def add_to_cart(product_id):
+    # Ensure the product exists to avoid adding invalid items
+    product = Product.query.get_or_404(product_id)
+
+    # Get the cart from the session, or create it if it doesn't exist
+    cart = session.get('cart', {})
+    product_id_str = str(product_id)
+
+    # Add the product or increment its quantity
+    cart[product_id_str] = cart.get(product_id_str, 0) + 1
+
+    # Save the cart back to the session
+    session['cart'] = cart
+
+    flash(f'"{product.name}" has been added to your cart!', "success")
+    # Redirect back to the previous page, or home if no referrer
+    return redirect(request.referrer or url_for('home'))
+
+
+@app.route("/cart")
+def cart():
+    cart = session.get('cart', {})
+    cart_items = []
+    total_price = 0
+
+    if cart:
+        product_ids = [int(pid) for pid in cart.keys()]
+        products = Product.query.filter(Product.id.in_(product_ids)).all()
+
+        product_map = {product.id: product for product in products}
+
+        for product_id, quantity in cart.items():
+            product = product_map.get(int(product_id))
+            if product:
+                subtotal = product.price * quantity
+                cart_items.append({
+                    'product': product,
+                    'quantity': quantity,
+                    'subtotal': subtotal
+                })
+                total_price += subtotal
+
+    return render_template('cart.html', title='Shopping Cart', cart_items=cart_items, total_price=total_price)
 
 
 # --- CLI Commands ---

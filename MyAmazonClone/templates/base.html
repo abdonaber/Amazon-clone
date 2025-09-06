@@ -13,7 +13,7 @@
             <a href="{{ url_for('home') }}"><h1>My Amazon Clone</h1></a>
             <ul>
                 <li><a href="{{ url_for('home') }}">Products</a></li>
-                <li><a href="#">Cart</a></li>
+                <li><a href="{{ url_for('cart') }}">Cart {% if session['cart'] %}<span class="cart-badge">{{ session['cart']|length }}</span>{% endif %}</a></li>
                 {% if current_user.is_authenticated %}
                     <li><a href="#">Account</a></li>
                     <li><a href="{{ url_for('logout') }}">Logout</a></li>
