@@ -7,8 +7,10 @@
     <div class="product-grid">
         {% for product in products %}
             <div class="product-card">
-                <img src="{{ product.image_url }}" alt="{{ product.name }}">
-                <h3>{{ product.name }}</h3>
+                <a href="{{ url_for('product_detail', product_id=product.id) }}" class="product-link">
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                    <h3>{{ product.name }}</h3>
+                </a>
                 <p class="price">${{ "%.2f"|format(product.price) }}</p>
                 <a href="#" class="btn">Add to Cart</a>
             </div>

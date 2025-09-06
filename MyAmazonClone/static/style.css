@@ -72,3 +72,48 @@ footer {
     bottom: 0;
     width: 100%;
 }
+
+/* Product Detail Page Styles */
+.product-detail-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.product-detail-image {
+    flex: 1 1 300px;
+}
+
+.product-detail-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.product-detail-info {
+    flex: 2 1 400px;
+}
+
+.product-detail-info h1 {
+    margin-top: 0;
+}
+
+.product-detail-info .stock {
+    font-size: 0.9rem;
+    color: #007600; /* Green for in stock */
+    margin-bottom: 1.5rem;
+}
+
+.btn-buy {
+    background-color: #FFA41C; /* A different color for Buy Now */
+    border-color: #FF8F00;
+}
+
+.product-link {
+    text-decoration: none;
+    color: inherit;
+}

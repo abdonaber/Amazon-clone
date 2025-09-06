@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - My Amazon Clone{% endblock %}
+
+{% block content %}
+    <div class="product-detail-container">
+        <div class="product-detail-image">
+            <img src="{{ product.image_url }}" alt="{{ product.name }}">
+        </div>
+        <div class="product-detail-info">
+            <h1>{{ product.name }}</h1>
+            <p class="price">${{ "%.2f"|format(product.price) }}</p>
+            <p class="stock">In Stock: {{ product.stock_quantity }}</p>
+            <h3>Description</h3>
+            <p>{{ product.description }}</p>
+            <a href="#" class="btn btn-buy">Buy Now</a>
+        </div>
+    </div>
+{% endblock %}
