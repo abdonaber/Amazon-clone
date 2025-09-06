@@ -126,6 +126,43 @@ def cart():
     return render_template('cart.html', title='Shopping Cart', cart_items=cart_items, total_price=total_price)
 
 
+@app.route("/update_cart/<int:product_id>", methods=['POST'])
+def update_cart(product_id):
+    cart = session.get('cart', {})
+    product_id_str = str(product_id)
+
+    try:
+        quantity = int(request.form['quantity'])
+    except (ValueError, KeyError):
+        flash('Invalid quantity specified.', 'danger')
+        return redirect(url_for('cart'))
+
+    if product_id_str in cart:
+        if quantity > 0:
+            cart[product_id_str] = quantity
+            flash('Cart updated successfully.', 'success')
+        else:
+            # If quantity is 0 or less, remove the item
+            del cart[product_id_str]
+            flash('Item removed from cart.', 'success')
+
+    session['cart'] = cart
+    return redirect(url_for('cart'))
+
+
+@app.route("/remove_from_cart/<int:product_id>", methods=['POST'])
+def remove_from_cart(product_id):
+    cart = session.get('cart', {})
+    product_id_str = str(product_id)
+
+    if product_id_str in cart:
+        cart.pop(product_id_str, None)
+        flash('Item removed from your cart.', 'success')
+
+    session['cart'] = cart
+    return redirect(url_for('cart'))
+
+
 # --- CLI Commands ---
 @app.cli.command('init-db')
 def init_db_command():
